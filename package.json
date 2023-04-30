@@ -1,0 +1,17 @@
+{
+  "name": "fullstack-react-toy",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/heeaepark/fullstack-react-toy.git",
+  "author": "heeaepark <kiedev06@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "client": "yarn workspace client start",
+    "server": "yarn workspace server start"
+  }
+}
