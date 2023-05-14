@@ -34,6 +34,8 @@ const originalMsgs = Array(50) // 임의의 50개 아이템이 담긴 배열 생
 
 const MsgList = () => {
   const [msgs, setMsgs] = useState(originalMsgs);
+  const [editingId, setEditingId] = useState(null);
+
   const onCreate = (text) => {
     const newMsg = {
       id: msgs.length + 1,
@@ -44,12 +46,45 @@ const MsgList = () => {
     setMsgs((msgs) => [newMsg, ...msgs]);
   };
 
+  const onUpdate = (text, id) => {
+    setMsgs((msgs) => {
+      const targetIndex = msgs.findIndex((msg) => msg.id === id);
+      if (targetIndex < 0) return msgs;
+      const newMsgs = [...msgs];
+      newMsgs.splice(targetIndex, 1, {
+        ...msgs[targetIndex],
+        text,
+      });
+      return newMsgs;
+    });
+    doneEdit();
+  };
+
+  const doneEdit = () => setEditingId(null);
+
+  const onDelete = (id) => {
+    setMsgs((msgs) => {
+      const targetIndex = msgs.findIndex((msg) => msg.id === id);
+      if (targetIndex < 0) return msgs;
+      const newMsgs = [...msgs];
+      newMsgs.splice(targetIndex, 1);
+      return newMsgs;
+    });
+  };
+
   return (
     <>
       <MsgInput mutate={onCreate} />
       <ul className="messages">
         {msgs.map((x) => (
-          <MsgItem key={x.id} {...x} />
+          <MsgItem
+            key={x.id}
+            {...x}
+            onUpdate={onUpdate}
+            onDelete={() => onDelete(x.id)}
+            startEdit={() => setEditingId(x.id)}
+            isEditing={editingId === x.id}
+          />
         ))}
       </ul>
     </>
